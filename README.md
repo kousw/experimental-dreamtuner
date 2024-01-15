@@ -22,7 +22,8 @@ If you are experimenting, it's necessary to properly adjust values such as the S
 
 Considering the GPU processing time and the dataset's quality and quantity, further training by an individual is deemed challenging. While I do not intend to continue development, the implementation is made public.
 
-The trained Subject Encoder can be downloaded from here. Replace the Pretrained models under models/dreamtuner with it for use.
+The trained Subject Encoder can be downloaded from [here
+](https://huggingface.co/kousw/subject-encoder-sd15). Replace the Pretrained models under models/dreamtuner with it for use.
 
 
 ## Environment
