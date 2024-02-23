@@ -84,6 +84,55 @@ accelerate config
 bash ./train.sh
 ```
 
+When training is complete, copy the generated files (subject_encoder, unet) to 'models/dreamtuner' folder.
+
+You will need to modify model_index.json as follows to replace the subject encoder and unet modules when loading.
+Also, please modify it if you have a different scheduler, as it will not work with anything other than the DDIM scheduler.
+
+```
+{
+    "_class_name": "DreamTunerPipelineSelfSubject",
+    "_diffusers_version": "0.8.0.dev0",
+    "feature_extractor": [
+      "transformers",
+      "CLIPImageProcessor"
+    ],
+    "safety_checker": [
+      "stable_diffusion",
+      "StableDiffusionSafetyChecker"
+    ],
+    "scheduler": [
+      "diffusers",
+      "DDIMScheduler"
+    ],
+    "text_encoder": [
+      "transformers",
+      "CLIPTextModel"
+    ],
+    "tokenizer": [
+      "transformers",
+      "CLIPTokenizer"
+    ],
+    "subject_encoder": [
+      "dreamtuner.models.subject_encoder",
+      "SubjectEncoder"
+    ],
+    "unet": [
+      "dreamtuner.models.unet",
+      "SDUNet2DConditionModel"
+    ],
+    "vae": [
+      "diffusers",
+      "AutoencoderKL"
+    ],
+    "unet_reference": [
+      "dreamtuner.models.unet",
+      "SDUNet2DConditionModel"
+    ]
+}
+```
+
+
 ### train dreambooth
 
 ```
@@ -95,7 +144,7 @@ bash ./train_dreambooth.sh
 ### Subject Encoder inference
 
 ```
-python main.py --model_name_or_path ./models/dreamtuner --subject_encoder_beta 0.5 --num_samples 1 --num_inference_steps 50 --reference_image ./datasets/sample/00006_rgb.png --negative_prompt "worst quality, normal quality, low quality, low res, blurry, text, watermark, logo, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch ,duplicate, ugly, monochrome, horror, geometry, mutation, disgusting" --prompt "best quality,1girl,outdoor"
+python inference.py --model_name_or_path ./models/dreamtuner --subject_encoder_beta 0.5 --num_samples 1 --num_inference_steps 50 --reference_image ./datasets/sample/00006_rgb.png --negative_prompt "worst quality, normal quality, low quality, low res, blurry, text, watermark, logo, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch ,duplicate, ugly, monochrome, horror, geometry, mutation, disgusting" --prompt "best quality,1girl,outdoor"
 ```
 
 ### Subject Driven inference
@@ -103,7 +152,7 @@ python main.py --model_name_or_path ./models/dreamtuner --subject_encoder_beta 0
 witout mask, without reference guidance (self-subject attention only)
 
 ```
-python inference_ss.py --model_name_or_path ./models/dreamtuner --subject_encoder_beta 0.2 --num_samples 1 --num_inference_steps 50 --reference_image ./datasets/sample/00006_rgb.png --negative_prompt "worst quality, normal quality, low quality, low res, blurry, text, watermark, logo, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch ,duplicate, ugly, monochrome, horror, geometry, mutation, disgusting" --prompt "best quality,1girl,outdoor" --enable_reference_guidance --reference_guidance_scale 2  --dtype float16
+python inference_ss.py --model_name_or_path ./models/dreamtuner --subject_encoder_beta 0.2 --num_samples 1 --num_inference_steps 50 --reference_image ./datasets/sample/00006_rgb.png --negative_prompt "worst quality, normal quality, low quality, low res, blurry, text, watermark, logo, banner, extra digits, cropped, jpeg artifacts, signature, username, error, sketch ,duplicate, ugly, monochrome, horror, geometry, mutation, disgusting" --prompt "best quality,1girl,outdoor" --dtype float16
 ```
 
 with mask, with reference guidance

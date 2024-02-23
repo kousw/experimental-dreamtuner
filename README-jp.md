@@ -92,6 +92,54 @@ accelerate config
 bash ./train.sh
 ```
 
+トレーニングが完了したら、生成したファイル（subject_encoder, unet）をdreamtunerフォルダにコピーしてください。
+
+読み込み時にsubject encoder と unetのモジュールを置き換えるために、model_index.jsonを以下のように上書きする必要があります。
+また、DDIM以外のスケジューラで動作しないため、スケジューラが異なる場合には修正してください。
+
+```
+{
+    "_class_name": "DreamTunerPipelineSelfSubject",
+    "_diffusers_version": "0.8.0.dev0",
+    "feature_extractor": [
+      "transformers",
+      "CLIPImageProcessor"
+    ],
+    "safety_checker": [
+      "stable_diffusion",
+      "StableDiffusionSafetyChecker"
+    ],
+    "scheduler": [
+      "diffusers",
+      "DDIMScheduler"
+    ],
+    "text_encoder": [
+      "transformers",
+      "CLIPTextModel"
+    ],
+    "tokenizer": [
+      "transformers",
+      "CLIPTokenizer"
+    ],
+    "subject_encoder": [
+      "dreamtuner.models.subject_encoder",
+      "SubjectEncoder"
+    ],
+    "unet": [
+      "dreamtuner.models.unet",
+      "SDUNet2DConditionModel"
+    ],
+    "vae": [
+      "diffusers",
+      "AutoencoderKL"
+    ],
+    "unet_reference": [
+      "dreamtuner.models.unet",
+      "SDUNet2DConditionModel"
+    ]
+}
+```
+
 ### train dreambooth
 
 ```
