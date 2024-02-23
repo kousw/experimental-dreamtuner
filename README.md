@@ -125,10 +125,6 @@ Also, please modify it if you have a different scheduler, as it will not work wi
     "vae": [
       "diffusers",
       "AutoencoderKL"
-    ],
-    "unet_reference": [
-      "dreamtuner.models.unet",
-      "SDUNet2DConditionModel"
     ]
 }
 ```
