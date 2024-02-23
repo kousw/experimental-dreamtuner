@@ -132,10 +132,6 @@ bash ./train.sh
     "vae": [
       "diffusers",
       "AutoencoderKL"
-    ],
-    "unet_reference": [
-      "dreamtuner.models.unet",
-      "SDUNet2DConditionModel"
     ]
 }
 ```
